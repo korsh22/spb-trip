@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matt's trip to Petersburg</title>
+<style>
+  :root{
+    --bg: #0d1420;
+    --panel: #141d2c;
+    --panel-2: #1a2436;
+    --line: #263248;
+    --gold: #c9a24a;
+    --gold-dim: #8a7038;
+    --ice: #6cb9b3;
+    --text: #eceef1;
+    --text-dim: #8d97a8;
+    --text-faint: #5b6579;
+    --serif: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(201,162,74,0.08), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(108,185,179,0.06), transparent 60%);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 32px 20px 80px;
+  }
+
+  .wrap{ max-width: 880px; margin: 0 auto; }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding: 8px 0 36px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 28px;
+  }
+  .eyebrow{
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    margin-bottom: 10px;
+  }
+  h1{
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(28px, 5vw, 42px);
+    margin: 0 0 6px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .subtitle{
+    color: var(--text-dim);
+    font-size: 15.5px;
+    max-width: 55ch;
+    margin: 0 0 28px;
+  }
+
+  .rate-row{
+    display:flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .rate-label{
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .rate-input-group{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px 10px;
+  }
+  .rate-input-group span{ color: var(--text-faint); font-size: 14px; }
+  input#rate{
+    width: 64px;
+    background: transparent;
+    border: none;
+    color: var(--gold);
+    font-family: var(--serif);
+    font-size: 17px;
+    outline: none;
+    text-align: right;
+  }
+
+  .total-block{
+    display:flex;
+    align-items: flex-end;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+  .total-number{
+    font-family: var(--serif);
+    font-size: clamp(42px, 8vw, 64px);
+    color: var(--text);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .total-number sup{
+    font-size: 0.35em;
+    color: var(--text-dim);
+    margin-left: 4px;
+    font-family: var(--sans);
+  }
+  .total-usd{
+    font-size: 15px;
+    color: var(--text-dim);
+    padding-bottom: 10px;
+  }
+  .total-usd b{ color: var(--ice); font-weight: 600; }
+
+  /* ---------- TABS ---------- */
+  nav.tabs{
+    display:flex;
+    gap: 4px;
+    margin-bottom: 26px;
+    border-bottom: 1px solid var(--line);
+  }
+  nav.tabs button{
+    appearance:none;
+    background:none;
+    border:none;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14.5px;
+    padding: 10px 4px;
+    margin-right: 22px;
+    cursor:pointer;
+    position:relative;
+    top:1px;
+  }
+  nav.tabs button.active{
+    color: var(--text);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 9px;
+  }
+  nav.tabs button:hover{ color: var(--text); }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; animation: fade .25s ease; }
+  @keyframes fade{ from{opacity:0; transform: translateY(4px);} to{opacity:1; transform:none;} }
+
+  /* ---------- BUDGET TABLE ---------- */
+  .group{ margin-bottom: 26px; }
+  .group-title{
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+  .row{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 13px 16px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  .row.optional{ opacity: 1; }
+  .row.optional.off{ opacity: 0.42; }
+  .row-left{ display:flex; align-items:flex-start; gap: 12px; min-width:0; }
+  .row-left input[type=checkbox]{
+    margin-top: 3px;
+    width: 15px; height: 15px;
+    accent-color: var(--gold);
+    flex-shrink:0;
+    cursor:pointer;
+  }
+  .row-text{ min-width:0; }
+  .row-title{ font-size: 14.5px; color: var(--text); }
+  .row-note{ font-size: 12.5px; color: var(--text-faint); margin-top: 2px; }
+  .row-right{ text-align:right; flex-shrink:0; white-space:nowrap; }
+  .row-rub{ font-size: 15px; color: var(--text); font-variant-numeric: tabular-nums; }
+  .row-src{ font-size: 11.5px; color: var(--text-faint); margin-top:1px; }
+  .flight-usd-wrap{
+    display:inline-flex;
+    align-items:center;
+    gap: 2px;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .flight-usd-wrap input{
+    width: 56px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    color: var(--gold);
+    font-family: var(--sans);
+    font-size: 13px;
+    padding: 3px 5px;
+    outline:none;
+    text-align:right;
+  }
+
+  .subtotal{
+    display:flex;
+    justify-content: space-between;
+    padding: 12px 16px 4px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    border-top: 1px dashed var(--line);
+    margin-top: 4px;
+  }
+  .subtotal b{ color: var(--ice); font-weight: 600; }
+
+  .flight-note{
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold-dim);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+  .flight-note b{ color: var(--text); }
+
+  /* ---------- PACKING LIST ---------- */
+  .pack-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  @media (max-width: 620px){ .pack-grid{ grid-template-columns: 1fr; } }
+  .pack-cat h3{
+    font-family: var(--serif);
+    font-weight:400;
+    font-size: 18px;
+    color: var(--gold);
+    margin: 0 0 12px;
+  }
+  .pack-cat ul{ list-style:none; margin:0; padding:0; }
+  .pack-cat li{
+    display:flex;
+    align-items:flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    color: var(--text);
+  }
+  .pack-cat li:last-child{ border-bottom:none; }
+  .pack-cat input[type=checkbox]{
+    margin-top: 3px;
+    width: 15px; height:15px;
+    accent-color: var(--ice);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .pack-cat li.checked span{ color: var(--text-faint); text-decoration: line-through; }
+  .pack-note{ font-size:12.5px; color: var(--text-faint); display:block; margin-top:2px; }
+
+  /* ---------- PLACES ---------- */
+  .places-intro{
+    font-size: 14.5px;
+    color: var(--text-dim);
+    margin: 0 0 22px;
+    max-width: 60ch;
+  }
+  .place-card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .place-top{
+    display:flex;
+    justify-content: space-between;
+    align-items:baseline;
+    gap: 10px;
+    flex-wrap:wrap;
+  }
+  .place-name{
+    font-family: var(--serif);
+    font-size: 19px;
+    color: var(--text);
+  }
+  .place-tag{
+    font-size: 11px;
+    color: var(--ice);
+    border: 1px solid rgba(108,185,179,0.35);
+    border-radius: 20px;
+    padding: 3px 10px;
+    white-space:nowrap;
+  }
+  .place-desc{
+    font-size: 14px;
+    color: var(--text-dim);
+    margin: 8px 0 10px;
+  }
+  .place-meta{
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+
+  footer{
+    text-align:center;
+    color: var(--text-faint);
+    font-size: 12.5px;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Saint Petersburg, December</div>
+    <h1>Matt's Trip Budget ♥</h1>
+    <p class="subtitle">A month in Petersburg — housing's sorted. This is just what needs to leave your wallet.</p>
+
+    <div class="rate-row">
+      <span class="rate-label">Exchange rate, ₽ per $1</span>
+      <div class="rate-input-group">
+        <span>₽</span>
+        <input type="number" id="rate" value="90" min="1" step="1">
+      </div>
+    </div>
+
+    <div class="total-block">
+      <div class="total-number" id="totalRub">0<sup>₽</sup></div>
+      <div class="total-usd">≈ <b id="totalUsd">$0</b> at the current rate</div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="budget">Budget</button>
+    <button class="tab-btn" data-tab="packing">What to pack</button>
+    <button class="tab-btn" data-tab="places">Where to go</button>
+  </nav>
+
+  <!-- ================= BUDGET ================= -->
+  <section class="panel active" id="panel-budget">
+
+    <div class="group">
+      <div class="group-title">Flight</div>
+      <div class="row optional" id="flightRow">
+        <div class="row-left">
+          <input type="checkbox" checked>
+          <div class="row-text">
+            <div class="row-title">Cape Town → Saint Petersburg</div>
+            <div class="row-note">One way, economy, December. Type your own number in dollars — rubles work themselves out.</div>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-rub"></div>
+          <div class="row-src">
+            <span class="flight-usd-wrap">$<input type="number" id="flightUsd" value="700" min="0" step="10"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Food, 30 days</div>
+      <div class="row optional" data-rub="24000">
+        <div class="row-left">
+          <input type="checkbox" checked>
+          <div class="row-text">
+            <div class="row-title">At home — groceries</div>
+            <div class="row-note">≈ 800 ₽/day, cooking together about half the time</div>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-rub"></div>
+          <div class="row-src">fixed in rubles</div>
+        </div>
+      </div>
+      <div class="row optional" data-rub="36000">
+        <div class="row-left">
+          <input type="checkbox" checked>
+          <div class="row-text">
+            <div class="row-title">Out — cafés and restaurants</div>
+            <div class="row-note">≈ 1200 ₽/day, the other half of meals</div>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-rub"></div>
+          <div class="row-src">fixed in rubles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Getting around</div>
+      <div class="row optional" data-usd="150">
+        <div class="row-left">
+          <input type="checkbox" checked>
+          <div class="row-text">
+            <div class="row-title">Taxis</div>
+            <div class="row-note">Yandex Taxi around the city, the whole month</div>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-rub"></div>
+          <div class="row-src">$150</div>
+        </div>
+      </div>
+      <div class="row optional" data-rub="20000">
+        <div class="row-left">
+          <input type="checkbox" checked>
+          <div class="row-text">
+            <div class="row-title">Fun stuff</div>
+            <div class="row-note">Ice skating, snowboarding, that kind of thing</div>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-rub"></div>
+          <div class="row-src">fixed in rubles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Activities</div>
+      <div class="row optional" data-rub="5000">
+        <div class="row-left">
+          <input type="checkbox" checked>
+          <div class="row-text">
+            <div class="row-title">Climbing gyms</div>
+            <div class="row-note">One-off visits around the city, excluding LUCH climbing gym</div>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-rub"></div>
+          <div class="row-src">fixed in rubles</div>
+        </div>
+      </div>
+      <div class="row optional" data-rub="10000">
+        <div class="row-left">
+          <input type="checkbox" checked>
+          <div class="row-text">
+            <div class="row-title">Museums and exhibitions</div>
+            <div class="row-note">The Hermitage, the Russian Museum, Erarta and others</div>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-rub"></div>
+          <div class="row-src">fixed in rubles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">Other</div>
+      <div class="row optional" data-usd="50">
+        <div class="row-left">
+          <input type="checkbox" checked>
+          <div class="row-text">
+            <div class="row-title">Medical insurance</div>
+            <div class="row-note">For the full length of the trip, rough estimate</div>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-rub"></div>
+          <div class="row-src">≈ $50</div>
+        </div>
+      </div>
+      <div class="row optional" data-rub="1500">
+        <div class="row-left">
+          <input type="checkbox" checked>
+          <div class="row-text">
+            <div class="row-title">SIM card</div>
+            <div class="row-note">Local number and data</div>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-rub"></div>
+          <div class="row-src">fixed in rubles</div>
+        </div>
+      </div>
+      <div class="row optional" data-rub="30000">
+        <div class="row-left">
+          <input type="checkbox" checked>
+          <div class="row-text">
+            <div class="row-title">Personal spending</div>
+            <div class="row-note">Buffer, just in case</div>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-rub"></div>
+          <div class="row-src">fixed in rubles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subtotal">
+      <span>Total across everything above</span>
+      <b id="subtotalCheck"></b>
+    </div>
+  </section>
+
+  <!-- ================= PACKING ================= -->
+  <section class="panel" id="panel-packing">
+    <p class="places-intro">Cape Town to a December Petersburg is a serious climate jump. This list covers the basics for a comfortable −5…−15°C with wind and damp.</p>
+
+    <div class="pack-grid">
+      <div class="pack-cat">
+        <h3>Top layer</h3>
+        <ul id="cat-top"></ul>
+      </div>
+      <div class="pack-cat">
+        <h3>Shoes and bottoms</h3>
+        <ul id="cat-bottom"></ul>
+      </div>
+      <div class="pack-cat">
+        <h3>Accessories</h3>
+        <ul id="cat-acc"></ul>
+      </div>
+      <div class="pack-cat">
+        <h3>Documents</h3>
+        <ul id="cat-docs"></ul>
+      </div>
+      <div class="pack-cat">
+        <h3>Personal</h3>
+        <ul id="cat-misc"></ul>
+      </div>
+      <div class="pack-cat">
+        <h3>For climbing</h3>
+        <ul id="cat-climb"></ul>
+      </div>
+    </div>
+    <p class="places-intro" style="margin-top:24px;">If you're missing something or forget it, Sonya's got you :)</p>
+  </section>
+
+  <!-- ================= PLACES ================= -->
+  <section class="panel" id="panel-places">
+    <p class="places-intro">Unconventional spots for someone who likes contemporary art, weird things, and good atmosphere.</p>
+    <div id="placesList"></div>
+  </section>
+
+</div>
+
+<script>
+  // ---------- Tabs ----------
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ---------- Budget calc ----------
+  const rateInput = document.getElementById('rate');
+  const totalRubEl = document.getElementById('totalRub');
+  const totalUsdEl = document.getElementById('totalUsd');
+  const subtotalCheck = document.getElementById('subtotalCheck');
+
+  function fmt(n){
+    return Math.round(n).toLocaleString('ru-RU');
+  }
+
+  function recalc(){
+    const rate = parseFloat(rateInput.value) || 0;
+    let totalRub = 0;
+
+    // Flight row (editable USD)
+    const flightRow = document.getElementById('flightRow');
+    const flightUsd = document.getElementById('flightUsd');
+    const flightCheckbox = flightRow.querySelector('input[type=checkbox]');
+    const flightActive = flightCheckbox.checked;
+    flightRow.classList.toggle('off', !flightActive);
+    const flightRub = (parseFloat(flightUsd.value) || 0) * rate;
+    flightRow.querySelector('.row-rub').textContent = '₽' + fmt(flightRub);
+    if(flightActive) totalRub += flightRub;
+
+    document.querySelectorAll('.row[data-rub], .row[data-usd]').forEach(row=>{
+      const isOptional = row.classList.contains('optional');
+      const checkbox = row.querySelector('input[type=checkbox]');
+      const active = !isOptional || (checkbox && checkbox.checked);
+      row.classList.toggle('off', isOptional && !active);
+
+      let rub;
+      if(row.dataset.rub){
+        rub = parseFloat(row.dataset.rub);
+      } else {
+        const usd = parseFloat(row.dataset.usd);
+        rub = usd * rate;
+      }
+      row.querySelector('.row-rub').textContent = '₽' + fmt(rub);
+      if(active) totalRub += rub;
+    });
+
+    totalRubEl.innerHTML = fmt(totalRub) + '<sup>₽</sup>';
+    totalUsdEl.textContent = rate > 0 ? ('$' + fmt(totalRub / rate)) : '—';
+    subtotalCheck.textContent = '₽' + fmt(totalRub);
+  }
+
+  rateInput.addEventListener('input', recalc);
+  document.getElementById('flightUsd').addEventListener('input', recalc);
+  document.querySelectorAll('.row.optional input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', recalc);
+  });
+  recalc();
+
+  // ---------- Packing list ----------
+  const packing = {
+    'cat-top': [
+      ['Warm winter coat / puffer', 'down to −15°C, with a hood'],
+      ['Warm sweater or fleece', '2–3'],
+      ['Thermal top', 'at least one set'],
+    ],
+    'cat-bottom': [
+      ['Waterproof winter boots', 'for slippery roads'],
+      ['Warm socks', 'wool or thermal, 3–4 pairs'],
+      ['Thick trousers / jeans', 'the wind cuts through thin fabric'],
+    ],
+    'cat-acc': [
+      ['Beanie', 'covers the ears'],
+      ['Gloves', 'ideally waterproof'],
+      ['Scarf or buff', ''],
+      ['Sunglasses', 'snow glare is real on a clear day'],
+    ],
+    'cat-docs': [
+      ['Passport', 'valid for at least 6 months after the trip'],
+      ['RuID registration', 'required for visa-free entry since 30.06.2025'],
+      ['Medical insurance', 'printout or PDF on your phone'],
+      ['Tickets and bookings', 'in case they ask'],
+    ],
+    'cat-misc': [
+      ['Power bank', 'because our phones are always dead'],
+      ['Lip balm', ''],
+      ['Basic meds', 'painkillers, plasters, something for a sore throat'],
+      ['Personal hygiene items', ''],
+      ['Your own tech', ''],
+    ],
+    'cat-climb': [
+      ['Climbing shoes', ''],
+      ['Chalk', ''],
+    ],
+  };
+
+  Object.entries(packing).forEach(([id, items])=>{
+    const ul = document.getElementById(id);
+    items.forEach(([title, note], i)=>{
+      const li = document.createElement('li');
+      const cbId = id + '-' + i;
+      li.innerHTML = `<input type="checkbox" id="${cbId}"><label for="${cbId}"><span>${title}</span>${note ? `<span class="pack-note">${note}</span>` : ''}</label>`;
+      const cb = li.querySelector('input');
+      cb.addEventListener('change', ()=> li.classList.toggle('checked', cb.checked));
+      ul.appendChild(li);
+    });
+  });
+
+  // ---------- Places ----------
+  const places = [
+    {
+      name: 'Sevkabel Port',
+      tag: 'industrial space',
+      desc: 'A former cable factory right on the waterfront. Exhibitions, an ice rink in winter, talks, water views — it runs year-round, not just in summer.',
+      meta: 'Kozhevennaya Line, 40 · Vasileostrovskaya metro'
+    },
+    {
+      name: 'New Holland',
+      tag: 'island',
+      desc: 'A former closed military island turned into an open city space: cultural events, contemporary art, and just a good place to walk among old red-brick buildings.',
+      meta: 'Admiralteysky Canal Embankment, 2 · Admiralteyskaya metro'
+    },
+    {
+      name: 'Erarta',
+      tag: 'contemporary art museum',
+      desc: "Russia's largest private museum of contemporary art. Installations, video art, immersive shows — built for anyone chasing the unconventional.",
+      meta: '29th Line V.O., 2 · Vasileostrovskaya metro'
+    },
+    {
+      name: 'Fligel on Ligovsky',
+      tag: 'creative cluster',
+      desc: 'An abandoned building turned into a hub for independent culture: house shows, workshops, exhibitions by emerging artists. Non-touristy Petersburg in its purest form.',
+      meta: 'Ligovsky Prospekt'
+    },
+    {
+      name: 'Brusnitsyn',
+      tag: 'year-round art space',
+      desc: 'Contemporary art shows, talks, screenings and festivals in a former industrial complex. There\'s a laser skating rink, ceramics and leather workshops, and views over the Gulf of Finland.',
+      meta: 'Kozhevennaya Line · Vasilyevsky Island'
+    },
+    {
+      name: 'Museum of St. Petersburg Art XX–XXI',
+      tag: 'newly opened',
+      desc: 'A collection of over 12,000 works, from avant-garde to today, in the Alafuzov mansion on the Griboyedov Canal. Genuinely new, hasn\'t turned touristy yet.',
+      meta: 'Griboyedov Canal, 101 · near Sadovaya'
+    },
+    {
+      name: 'Loft Project Etagi',
+      tag: 'art space across 5 floors',
+      desc: 'A former bread factory converted into galleries, design shops and studios. The rooftop has an open deck looking out over Ligovsky and the city centre — worth the climb even in winter.',
+      meta: 'Ligovsky Prospekt, 74 · Ligovsky Prospekt metro'
+    },
+    {
+      name: 'Okhta Park — forest ice rink',
+      tag: 'winter skating',
+      desc: 'An ice rink right inside a pine forest, two rinks connected by paths among fir trees and fairy lights, about 10km from the city. Nothing like a regular city rink — more of a Scandinavian feel.',
+      meta: 'Leningrad Region, Mistolovo village'
+    },
+    {
+      name: 'Park Pobedy skating rink',
+      tag: 'winter skating',
+      desc: "A year-round funfair and ice rink in a park on the south side of the city — simpler and easier to get to than Okhta Park, but it has its own atmosphere.",
+      meta: 'Moskovsky Park Pobedy'
+    },
+    {
+      name: 'Vyborg',
+      tag: 'day trip',
+      desc: 'A medieval castle, narrow cobbled streets, and Scandinavian architecture a couple of hours from Petersburg by train. A completely different, non-capital Petersburg — small and strange in its own way.',
+      meta: '~2 hours from the city, train from Finlyandsky Station'
+    },
+    {
+      name: 'Planetarium No. 1',
+      tag: 'largest dome in the world',
+      desc: 'Housed in an old gasholder building, with a 37-metre dome and 40 laser projectors. Alongside the educational shows, there are regular concerts and multimedia shows under the dome.',
+      meta: 'Obvodny Canal Embankment, 74'
+    },
+    {
+      name: 'Rodina Cinema',
+      tag: 'arthouse and classics',
+      desc: 'A historic 1914 movie theatre on Manezhnaya Square with two screening rooms. The program leans independent and arthouse, with classic-film retrospectives and a free film club every Tuesday.',
+      meta: 'Karavannaya St., 12 · near Gostiny Dvor'
+    },
+    {
+      name: 'Kinoparking',
+      tag: 'unconventional cinema format',
+      desc: 'An alternative venue for watching films outside the standard cinema-hall format — worth checking the current listings before going.',
+      meta: ''
+    },
+    {
+      name: 'Nevidimyi Teatr (Invisible Theatre)',
+      tag: 'independent theatre',
+      desc: 'A company led by Semyon Serzin that deliberately steps outside traditional theatrical convention. The repertoire draws on contemporary playwrights rather than classics staged the usual way.',
+      meta: ''
+    },
+  ];
+
+  const placesList = document.getElementById('placesList');
+  places.forEach(p=>{
+    const div = document.createElement('div');
+    div.className = 'place-card';
+    div.innerHTML = `
+      <div class="place-top">
+        <div class="place-name">${p.name}</div>
+        <div class="place-tag">${p.tag}</div>
+      </div>
+      <div class="place-desc">${p.desc}</div>
+      ${p.meta ? `<div class="place-meta">${p.meta}</div>` : ''}
+    `;
+    placesList.appendChild(div);
+  });
+</script>
+</body>
+</html>
