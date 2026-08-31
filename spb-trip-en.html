@@ -231,6 +231,14 @@
     margin-bottom: 24px;
   }
   .flight-note b{ color: var(--text); }
+  .flight-note ol{
+    margin: 8px 0 0;
+    padding-left: 18px;
+  }
+  .flight-note li{
+    margin-bottom: 6px;
+  }
+  .flight-note li:last-child{ margin-bottom: 0; }
 
   /* ---------- PACKING LIST ---------- */
   .pack-grid{
@@ -310,6 +318,20 @@
     font-size: 12.5px;
     color: var(--text-faint);
   }
+  .place-bottom{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .place-link{
+    font-size: 12.5px;
+    color: var(--ice);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .place-link:hover{ text-decoration: underline; }
 
   footer{
     text-align:center;
@@ -350,6 +372,15 @@
   <!-- ================= BUDGET ================= -->
   <section class="panel active" id="panel-budget">
 
+    <div class="flight-note">
+      <b>How to use this</b>
+      <ol>
+        <li>As of today, $1 = ₽90. This number moves daily since the ruble isn't stable, so update the rate field above right before the trip.</li>
+        <li>The one-way flight is currently priced around $600, but that field is editable — type in whatever the real fare turns out to be.</li>
+        <li>Every line has a checkbox — untick anything that doesn't apply, and the total recalculates automatically.</li>
+      </ol>
+    </div>
+
     <div class="group">
       <div class="group-title">Flight</div>
       <div class="row optional" id="flightRow">
@@ -363,7 +394,7 @@
         <div class="row-right">
           <div class="row-rub"></div>
           <div class="row-src">
-            <span class="flight-usd-wrap">$<input type="number" id="flightUsd" value="700" min="0" step="10"></span>
+            <span class="flight-usd-wrap">$<input type="number" id="flightUsd" value="600" min="0" step="10"></span>
           </div>
         </div>
       </div>
@@ -668,73 +699,85 @@
       name: 'Sevkabel Port',
       tag: 'industrial space',
       desc: 'A former cable factory right on the waterfront. Exhibitions, an ice rink in winter, talks, water views — it runs year-round, not just in summer.',
-      meta: 'Kozhevennaya Line, 40 · Vasileostrovskaya metro'
+      meta: 'Kozhevennaya Line, 40 · Vasileostrovskaya metro',
+      url: 'https://sevcableport.ru/'
     },
     {
       name: 'New Holland',
       tag: 'island',
       desc: 'A former closed military island turned into an open city space: cultural events, contemporary art, and just a good place to walk among old red-brick buildings.',
-      meta: 'Admiralteysky Canal Embankment, 2 · Admiralteyskaya metro'
+      meta: 'Admiralteysky Canal Embankment, 2 · Admiralteyskaya metro',
+      url: 'https://www.newhollandsp.ru/'
     },
     {
       name: 'Erarta',
       tag: 'contemporary art museum',
       desc: "Russia's largest private museum of contemporary art. Installations, video art, immersive shows — built for anyone chasing the unconventional.",
-      meta: '29th Line V.O., 2 · Vasileostrovskaya metro'
+      meta: '29th Line V.O., 2 · Vasileostrovskaya metro',
+      url: 'https://www.erarta.com/en/'
     },
     {
-      name: 'Fligel on Ligovsky',
+      name: 'Fligel',
       tag: 'creative cluster',
-      desc: 'An abandoned building turned into a hub for independent culture: house shows, workshops, exhibitions by emerging artists. Non-touristy Petersburg in its purest form.',
-      meta: 'Ligovsky Prospekt'
+      desc: 'An entertainment cluster at the corner of Vosstaniya and Nekrasova streets: a small hostel, a stand-up club, workshops, cafés and bars. Non-touristy Petersburg in its purest form.',
+      meta: 'Vosstaniya St., 24 · Chernyshevskaya / Ploshchad Vosstaniya metro',
+      url: 'https://kudago.com/spb/place/art-prostranstvo-fligel/'
     },
     {
       name: 'Brusnitsyn',
       tag: 'year-round art space',
-      desc: 'Contemporary art shows, talks, screenings and festivals in a former industrial complex. There\'s a laser skating rink, ceramics and leather workshops, and views over the Gulf of Finland.',
-      meta: 'Kozhevennaya Line · Vasilyevsky Island'
+      desc: 'Contemporary art shows, talks, screenings and festivals in a former leather-factory complex. There\'s a rooftop concert venue, cafés and workshops, and views over the Neva.',
+      meta: 'Kozhevennaya Line, 30 · Vasilyevsky Island',
+      url: 'https://brusnitsyn.spb.ru/'
     },
     {
       name: 'Museum of St. Petersburg Art XX–XXI',
       tag: 'newly opened',
       desc: 'A collection of over 12,000 works, from avant-garde to today, in the Alafuzov mansion on the Griboyedov Canal. Genuinely new, hasn\'t turned touristy yet.',
-      meta: 'Griboyedov Canal, 101 · near Sadovaya'
+      meta: 'Griboyedov Canal, 101 · near Sadovaya',
+      url: 'https://www.afisha.ru/spb/museum/muzey-iskusstva-sankt-peterburga-xx-xxi-vekov-20322/'
     },
     {
       name: 'Loft Project Etagi',
       tag: 'art space across 5 floors',
       desc: 'A former bread factory converted into galleries, design shops and studios. The rooftop has an open deck looking out over Ligovsky and the city centre — worth the climb even in winter.',
-      meta: 'Ligovsky Prospekt, 74 · Ligovsky Prospekt metro'
+      meta: 'Ligovsky Prospekt, 74 · Ligovsky Prospekt metro',
+      url: 'https://www.loftprojectetagi.ru/'
     },
     {
       name: 'Okhta Park — forest ice rink',
       tag: 'winter skating',
       desc: 'An ice rink right inside a pine forest, two rinks connected by paths among fir trees and fairy lights, about 10km from the city. Nothing like a regular city rink — more of a Scandinavian feel.',
-      meta: 'Leningrad Region, Mistolovo village'
+      meta: 'Leningrad Region, Mistolovo village',
+      url: 'https://fok-katok.ohtapark.ru/'
     },
     {
       name: 'Park Pobedy skating rink',
       tag: 'winter skating',
       desc: "A year-round funfair and ice rink in a park on the south side of the city — simpler and easier to get to than Okhta Park, but it has its own atmosphere.",
-      meta: 'Moskovsky Park Pobedy'
+      meta: 'Moskovsky Park Pobedy',
+      url: 'https://excurspb.ru/guide/attractions/attraktsionyi-v-sankt-peterburge/'
     },
     {
       name: 'Vyborg',
       tag: 'day trip',
       desc: 'A medieval castle, narrow cobbled streets, and Scandinavian architecture a couple of hours from Petersburg by train. A completely different, non-capital Petersburg — small and strange in its own way.',
-      meta: '~2 hours from the city, train from Finlyandsky Station'
+      meta: '~2 hours from the city, train from Finlyandsky Station',
+      url: 'https://en.wikipedia.org/wiki/Vyborg'
     },
     {
       name: 'Planetarium No. 1',
       tag: 'largest dome in the world',
       desc: 'Housed in an old gasholder building, with a 37-metre dome and 40 laser projectors. Alongside the educational shows, there are regular concerts and multimedia shows under the dome.',
-      meta: 'Obvodny Canal Embankment, 74'
+      meta: 'Obvodny Canal Embankment, 74',
+      url: 'https://planetarium.one/'
     },
     {
       name: 'Rodina Cinema',
       tag: 'arthouse and classics',
       desc: 'A historic 1914 movie theatre on Manezhnaya Square with two screening rooms. The program leans independent and arthouse, with classic-film retrospectives and a free film club every Tuesday.',
-      meta: 'Karavannaya St., 12 · near Gostiny Dvor'
+      meta: 'Karavannaya St., 12 · near Gostiny Dvor',
+      url: 'https://rodinakino.ru/cinema'
     },
     {
       name: 'Kinoparking',
@@ -760,7 +803,10 @@
         <div class="place-tag">${p.tag}</div>
       </div>
       <div class="place-desc">${p.desc}</div>
-      ${p.meta ? `<div class="place-meta">${p.meta}</div>` : ''}
+      <div class="place-bottom">
+        ${p.meta ? `<div class="place-meta">${p.meta}</div>` : '<div></div>'}
+        ${p.url ? `<a class="place-link" href="${p.url}" target="_blank" rel="noopener">website ↗</a>` : ''}
+      </div>
     `;
     placesList.appendChild(div);
   });
